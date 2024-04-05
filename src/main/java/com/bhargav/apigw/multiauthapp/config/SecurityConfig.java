@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/login","/login-error").permitAll()
+                    .antMatchers("/", "/login","/login-error","/h2-console/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
@@ -39,6 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .defaultSuccessUrl("/welcome")
                     .failureHandler(customAuthenticationFailureHandler());
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
     @Bean
