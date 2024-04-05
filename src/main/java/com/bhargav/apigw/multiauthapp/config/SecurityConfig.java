@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
@@ -29,13 +28,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/welcome")
-                .failureUrl("/login-error");
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/welcome")
+                    .failureHandler(customAuthenticationFailureHandler())
+                    .and()
+                .logout()
+                    .logoutSuccessUrl("/login")
+                    .and()
+                .oauth2Login()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/welcome")
+                    .failureHandler(customAuthenticationFailureHandler());
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new CustomPasswordEncoder();
+    }
+
+    @Bean
+    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 }
