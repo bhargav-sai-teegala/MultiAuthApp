@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 public class LoginAttempt {
@@ -13,10 +14,14 @@ public class LoginAttempt {
     private Long id;
     private String username;
     private String ipAddress;
+    private String password;
+    private LocalDateTime requestTimestamp;
 
-    public LoginAttempt(String username, String ipAddress) {
+    public LoginAttempt(String username, String ipAddress, String password, LocalDateTime requestTime) {
         this.username = username;
         this.ipAddress = ipAddress;
+        this.password = password;
+        this.requestTimestamp = requestTime;
     }
 
     public LoginAttempt() {
@@ -45,5 +50,20 @@ public class LoginAttempt {
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public LocalDateTime getRequestTimestamp() {
+        return requestTimestamp;
+    }
+
+    public void setRequestTimestamp(LocalDateTime requestTimestamp) {
+        this.requestTimestamp = requestTimestamp;
+    }
+
 }
 
