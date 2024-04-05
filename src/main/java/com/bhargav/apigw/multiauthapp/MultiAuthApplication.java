@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MultiauthappApplication {
+public class MultiAuthApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MultiauthappApplication.class, args);
+		SpringApplication.run(MultiAuthApplication.class, args);
 	}
 
 }
