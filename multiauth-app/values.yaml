@@ -3,12 +3,14 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
+application:
+  name: multiauthapp
+  port: 8080
 image:
-  repository: nginx
+  repository: multiauthapptest2
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -38,19 +40,19 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
+    - host: multiauthapplication.com
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -80,3 +82,28 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+database:
+  url: jdbc:h2:mem:testdb
+  driverClassName: org.h2.Driver
+  username: sa
+  password: password
+
+h2_console:
+  enabled: true
+  path: /h2-console
+
+google_oauth:
+  client_id: 1068162885633-i72h3921ei13o6sh5g84hrva8mj2ljut.apps.googleusercontent.com
+  client_secret: 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
+  scope: email,profile
+  authorization_grant_type: authorization_code
+  redirect_uri: http://multiauthapplication.com/login/oauth2/code/google
+
+facebook_oauth:
+  client_id: 1705423089516936
+  client_secret: 51490e15d755f674aba278755d6cac63
+  scope: email
+  authorization_grant_type: authorization_code
+  redirect_uri: http://multiauthapplication.com/login/oauth2/code/facebook
+
