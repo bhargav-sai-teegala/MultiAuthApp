@@ -7,7 +7,7 @@ application:
   name: multiauthapp
   port: 8080
 image:
-  repository: multiauthapptest2
+  repository: multiauthapptest
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -93,17 +93,6 @@ h2_console:
   enabled: true
   path: /h2-console
 
-google_oauth:
-  client_id: 1068162885633-i72h3921ei13o6sh5g84hrva8mj2ljut.apps.googleusercontent.com
-  client_secret: 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
-  scope: email,profile
-  authorization_grant_type: authorization_code
-  redirect_uri: http://multiauthapplication.com/login/oauth2/code/google
-
-facebook_oauth:
-  client_id: 1705423089516936
-  client_secret: 51490e15d755f674aba278755d6cac63
-  scope: email
-  authorization_grant_type: authorization_code
-  redirect_uri: http://multiauthapplication.com/login/oauth2/code/facebook
-
+redirect_uri:
+  google: http://multiauthapplication.com/login/oauth2/code/google
+  facebook: https://multiauthapplication.com/login/oauth2/code/facebook

@@ -35,15 +35,55 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_REDIRECT_URI
-              value: http://multiauthapplication.com/login/oauth2/code/google
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: google_redirect_uri
             - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_FACEBOOK_REDIRECT_URI
-              value: https://multiauthapplication.com/login/oauth2/code/facebook
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: facebook_redirect_uri
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: google-client-id
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: google-client-secret
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_FACEBOOK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: facebook-client-id
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_FACEBOOK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: facebook-client-secret
+          volumeMounts:
+            - name: app-config-volume
+              mountPath: /etc/config
+              readOnly: true
+            - name: oauth-credentials-volume
+              mountPath: /etc/secrets
+              readOnly: true
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: app-config-volume
+          configMap:
+            name: multiauthapp-multiauth-app-config
+        - name: oauth-credentials-volume
+          secret:
+            secretName: oauth-credentials
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
